@@ -1,6 +1,6 @@
- using hostname.
+ //using hostname.
 
-[code language="java"]
+//[code language="java"]
 node {
 
     withMaven(maven:'maven') {
