@@ -12,7 +12,7 @@
      stage('docker image') {
       steps {
        sh 'docker build . -t yannickeboo/test:app1-$VERSION -f account-service/Dockerfile'
-       sh 'docker login -u "yannickeboo" -p "Airfrance.123" docker.io
+       sh 'docker login -u "yannickeboo" -p "Airfrance.123" docker.io'
        sh 'docker push yannickeboo/test:app1-$VERSION'
         
      
