@@ -1,37 +1,37 @@
- //using hostname.
-
-//[code language="java"]
-node {
-
-    withMaven(maven:'maven') {
-
-        stage('Checkout') {
-            git url: 'https://github.com/saurabh0010/sample-spring-microservices.git', CredentialsID: 'github', branch: 'master'
-        }
-
-        stage('Build') {
-            sh 'mvn clean install'
-
-            def pom = readMavenPom file:'pom.xml'
-            print pom.version
-            env.version = pom.version
-        }
-
-        stage('Image') {
-            dir ('account-service') {
-                def app = docker.build "localhost:5000/account-service:${env.version}"
-                app.push()
+ pipeline {
+    agent none
+    stages {
+        stage("test"){
+            steps {
+                script {
+                    echo "Testing the application..."
+                    echo "Excuting pipeline for branch $BRANCH_NAME"
+                }
             }
         }
-
-        stage ('Run') {
-            docker.image("localhost:5000/account-service:${env.version}").run('-p 2222:2222 -h account --name account --link discovery')
+        stage('build') {
+            when {
+                expression{
+                    BRANCH_NAME == 'master'
+                }
+            }
+            steps {
+                script {
+                    echo "Building the application.."
+                }
+            }
         }
-
-        stage ('Final') {
-            build job: 'customer-service-pipeline', wait: false
-        }      
-
+        stage('deploy') {
+            when {
+                expression{
+                    BRANCH_NAME == 'master'
+                }
+            }
+            steps {
+                script {
+                    echo "Deploying the application..."
+                }
+            }
+        }
     }
-
 }
