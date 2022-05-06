@@ -2,7 +2,7 @@
     agent any
     environment{
         VERSION = "${env.BUILD_ID}"
-        IMAGE_NAME = "yannickeboo/anaeleboo"
+        IMAGE_NAME = "anaeleboo"
     }
     stages {
         stage('Build') { 
@@ -13,7 +13,7 @@
      stage('docker image') {
       steps {
        sh 'docker build . -t $IMAGE_NAME:app1-$VERSION -f account-service/Dockerfile'
-       withDockerRegistry([ credentialsId: "Docker_hub", url: "https://index.docker.io" ]) {
+       withDockerRegistry([ credentialsId: "Docker_hub", url: "https://index.docker.io/yannickeboo" ]) {
        sh 'docker push $IMAGE_NAME:app1-$VERSION'
         }
        
