@@ -12,8 +12,10 @@
      stage('docker image') {
       steps {
        sh 'docker build . -t yannickeboo/test:app1-$VERSION -f account-service/Dockerfile'
-       sh 'echo "password" | docker login -u "$username" --password-stdin docker.io'
+       withDockerRegistry([ credentialsId: "docker_hub", url: "" ]) {
        sh 'docker push yannickeboo/test:app1-$VERSION'
+        }
+       
         
      
          
