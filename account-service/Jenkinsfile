@@ -13,9 +13,9 @@
       steps {
        sh 'docker build . -t yannickeboo/test:app1-$VERSION -f account-service/Dockerfile'
        withCredentials([usernamePassword(credentialsId: 'docker_full', passwordVariable: 'DOCKER_REGISTRY_PWD', usernameVariable: 'DOCKER_REGISTRY_USER')]) {
-            
-        }
        sh 'docker push yannickeboo/test:app1-$VERSION'
+        }
+     
          
       }
      }
