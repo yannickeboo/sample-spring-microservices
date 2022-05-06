@@ -6,12 +6,14 @@
                 sh 'mvn -B -DskipTests clean package' 
             }
         }
-     stage('docker image'){
-       sh '''
+       stage('docker image'){
+        steps{
+            sh '''
                                 docker build -t yannickeboo:${VERSION} .
                                 docker login -u yannickeboo -p $docker_yann
                               
                             '''
+        }
      }
     }
 }
