@@ -5,6 +5,27 @@
         IMAGE_NAME = "yannickeboo/anaeleboo"
     }
     stages {
+          stage("sonar quality check"){
+            agent {
+                docker {
+                    image 'openjdk:8u332-oraclelinux8'
+                }
+            }
+            steps{
+                script{
+                    withSonarQubeEnv(credentialsId: 'sonar-token') {
+                      sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar'
+       
+                    }
+                    timeout(time: 1, unit: 'HOURS') {
+                      def qg = waitForQualityGate()
+                      if (qg.status != 'OK') {
+                           error "Pipeline aborted due to quality gate failure: ${qg.status}"
+                      }
+                    }
+                }  
+            }
+        }
         stage('Build') { 
             steps {
                 sh 'mvn -B -DskipTests clean package' 
