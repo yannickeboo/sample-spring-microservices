@@ -9,6 +9,10 @@
                 sh 'mvn -B -DskipTests clean package' 
             }
         }
-       
+     stage('docker image') {
+      steps {
+       docker build . -t yannickeboo:$VERSION -f account-service/Dockerfile
+      }
+     }
     }
 }
