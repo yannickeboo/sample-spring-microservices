@@ -6,7 +6,7 @@
 		<artifactId>sample-spring-microservices</artifactId>
 		<version>1.0-SNAPSHOT</version>
 	</parent>
-	<artifactId>account-service</artifactId>
+	<artifactId>account-service-eboo</artifactId>
 
 	<dependencies>
 		<dependency>
