@@ -12,7 +12,7 @@
      stage('docker image') {
       steps {
        sh 'docker build . -t yannickeboo/test:app1-$VERSION -f account-service/Dockerfile'
-       withDockerRegistry([ credentialsId: "docker_hub", url: "" ]) {
+       withDockerRegistry([ credentialsId: "Docker_hub", url: "" ]) {
        sh 'docker push yannickeboo/test:app1-$VERSION'
         }
        
