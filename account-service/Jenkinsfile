@@ -12,7 +12,7 @@
        stage('docker image'){
         steps{
          dir('/account-service/'){
-            sh 'cd /account-service/ | docker build -t yannickeboo:${VERSION} .'
+            sh 'docker build -t yannickeboo:${VERSION} -f Dockerfile .'
             sh 'docker login -u yannickeboo -p $docker_yann'
                               
          }           
