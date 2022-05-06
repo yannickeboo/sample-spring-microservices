@@ -9,7 +9,7 @@
      stage('docker image'){
        sh '''
                                 docker build -t yannickeboo:${VERSION} .
-                                docker login -u yannickeboo -p $docker_pass
+                                docker login -u yannickeboo -p $docker_yann
                               
                             '''
     }
