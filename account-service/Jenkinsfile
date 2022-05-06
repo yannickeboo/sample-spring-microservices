@@ -13,7 +13,7 @@
         steps{
          dir('/account-service/'){
             sh 'docker build -t yannickeboo:${VERSION} -f Dockerfile .'
-            sh 'docker login -u yannickeboo -p $docker_yann'
+            sh 'docker login -u yannickeboo:${VERSION} -p $docker_yann'
                               
          }           
         
