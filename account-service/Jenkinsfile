@@ -1,36 +1,14 @@
  pipeline {
-    agent none
+    agent {
+        docker {
+            image 'maven:3.8.1-adoptopenjdk-11' 
+            args '-v /root/.m2:/root/.m2' 
+        }
+    }
     stages {
-        stage("test"){
+        stage('Build') { 
             steps {
-                script {
-                    echo "Testing the application..."
-                    echo "Excuting pipeline for branch $BRANCH_NAME"
-                }
-            }
-        }
-        stage('build') {
-            when {
-                expression{
-                    BRANCH_NAME == 'master'
-                }
-            }
-            steps {
-                script {
-                    echo "Building the application.."
-                }
-            }
-        }
-        stage('deploy') {
-            when {
-                expression{
-                    BRANCH_NAME == 'master'
-                }
-            }
-            steps {
-                script {
-                    echo "Deploying the application..."
-                }
+                sh 'mvn -B -DskipTests clean package' 
             }
         }
     }
