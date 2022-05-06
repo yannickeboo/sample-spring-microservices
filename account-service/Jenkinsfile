@@ -12,7 +12,10 @@
      stage('docker image') {
       steps {
        sh 'docker build . -t yannickeboo:app1-$VERSION -f account-service/Dockerfile'
+         withCredentials([usernamePassword(credentialsId: 'docker_full', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+    
        sh 'docker push yannickeboo:app1-$VERSION'
+         }
       }
      }
     }
