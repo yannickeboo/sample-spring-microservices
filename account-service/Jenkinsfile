@@ -11,7 +11,7 @@
         }
      stage('docker image') {
       steps {
-       docker build . -t yannickeboo:$VERSION -f account-service/Dockerfile
+       sh 'docker build . -t yannickeboo:$VERSION -f account-service/Dockerfile'
       }
      }
     }
