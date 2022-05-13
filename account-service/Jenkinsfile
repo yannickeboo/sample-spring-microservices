@@ -18,7 +18,7 @@
         }
      stage('docker image') {
        agent { 
-     docker { image 'docker.io/library/docker:dind' }
+     docker { image 'docker.io/library/docker:20.10.16-dind' }
           }
       steps {
        
