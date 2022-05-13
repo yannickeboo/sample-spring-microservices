@@ -1,8 +1,6 @@
  pipeline {
  
-    agent { 
-     docker { image 'docker.io/library/maven:3.8.5-openjdk-11' }
-          }
+    agent none
    
     environment{
         VERSION = "${env.BUILD_ID}"
@@ -11,11 +9,17 @@
     stages {
           
         stage('Build') { 
+            agent { 
+     docker { image 'docker.io/library/maven:3.8.5-openjdk-11' }
+          }
             steps {
                 sh 'mvn -B -DskipTests clean package' 
             }
         }
      stage('docker image') {
+       agent { 
+     docker { image 'docker.io/library/docker:dind' }
+          }
       steps {
        
        withDockerRegistry([ credentialsId: "Docker_hub", url: "https://index.docker.io/v1/" ]) {
