@@ -1,6 +1,7 @@
  pipeline {
-   # agent any
-  agent { image 'maven:3.8.5-openjdk-8-slim' }
+ 
+    agent { image 'maven:3.8.5-openjdk-8-slim' 
+          }
    
     environment{
         VERSION = "${env.BUILD_ID}"
