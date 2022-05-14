@@ -16,7 +16,7 @@ pipeline {
         }
         stage('SonarQube analysis 1') {
             steps {
-                sh 'mvn clean package sonar:sonar -PQualityProfileOne'
+                sh 'mvn clean package sonar:sonar'
             }
         }
      stage('docker image') {
