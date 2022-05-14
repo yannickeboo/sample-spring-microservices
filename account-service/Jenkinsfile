@@ -1,6 +1,6 @@
  pipeline {
  
-    agent none
+    agent any
    
     environment{
         VERSION = "${env.BUILD_ID}"
@@ -17,9 +17,7 @@
             }
         }
      stage('docker image') {
-      agent { 
-          docker { image 'docker.io/library/docker:20.10.16-dind' }
-          }
+      
       steps {
        
        withDockerRegistry([ credentialsId: "Docker_hub", url: "https://index.docker.io/v1/" ]) {
