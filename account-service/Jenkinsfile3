@@ -9,9 +9,7 @@ pipeline {
     stages {
           
         stage('Build') { 
-            agent { 
-              docker { image 'docker.io/library/maven:3.8.5-openjdk-11' }
-          }
+            
             steps {
                 sh 'mvn -B -DskipTests clean package' 
             }
