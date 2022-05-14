@@ -1,0 +1,94 @@
+https://www.youtube.com/watch?v=7KCS70sCoK0&list=PLy7NrYWoggjw_LIiDK1LXdNN82uYuuuiC&index=6
+
+
+CODE_CHANGES = getGitVhanges()
+pipeline {
+ 
+    agent { label 'node1' }
+    
+    tools {
+            gradle           
+                      }
+   parameters {
+   string(name,defaultvalue,description)
+   choice(name,choices,descriptions)
+   booleanParam(name,defaultvalue,description)
+     
+   
+   }
+   
+   
+    environment{
+        VERSION = "${env.BUILD_ID}"
+        IMAGE_NAME = "yannickeboo/parker"
+    }
+    stages {
+          
+        stage('Build') { 
+            when {
+            expression {
+                  BRANCH_NAME == 'dev' || BRANCH_NAME == 'master'
+                   BRANCH_NAME == 'dev' && CODE_CHANGES == true
+                   params.name 
+            
+            steps {
+                sh 'mvn -B -DskipTests clean package' 
+            }
+        }
+        stage('Quality Gate Statuc Check'){
+
+                  steps{
+                      script{
+                      withSonarQubeEnv('sonarqube') { 
+                      sh "mvn sonar:sonar"
+                       }
+                      timeout(time: 1, unit: 'HOURS') {
+                      def qg = waitForQualityGate()
+                      if (qg.status != 'OK') {
+                           error "Pipeline aborted due to quality gate failure: ${qg.status}"
+                      }
+                    }
+		    sh "mvn clean install"
+                  }
+                }  
+              }
+    
+     stage('docker image') {
+      
+      steps {
+       
+       withDockerRegistry([ credentialsId: "Docker_hub", url: "https://index.docker.io/v1/" ]) {
+       sh 'docker build . -t $IMAGE_NAME:app1-$VERSION -f account-service/Dockerfile'
+       sh 'docker tag $IMAGE_NAME:app1-$VERSION $IMAGE_NAME:$VERSION'
+       sh 'docker push $IMAGE_NAME:app1-$VERSION'
+       sh 'docker push $IMAGE_NAME:$VERSION'
+        
+        }
+       
+        
+     
+         
+      }
+     }
+      stage('indentifying misconfigs using datree in helm charts'){
+            steps{
+                script{
+
+                    dir('kubernetes/') {
+                        withEnv(['DATREE_TOKEN=75b8f4e7-efcb-4366-82b0-de926a27fd28']) {
+                              sh 'datree test anael/*'
+                        }
+                    }
+                }
+            }
+        }
+        
+        post {
+              always{
+              }
+              success{}
+              failure{}
+        
+    }
+    
+}
