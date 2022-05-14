@@ -57,5 +57,23 @@
 			</plugin>
 		</plugins>
 	</build>
+	<properties>
+          <sonar.branch>Dev_${sonar.profile}</sonar.branch>
+        </properties>
+
+        <profiles>
+          <profile>
+            <id>QualityProfileOne</id>
+            <properties>
+              <sonar.profile>MyQualityProfile1</sonar.profile>
+            </properties>
+          </profile>
+          <profile>
+            <id>QualityProfileTwo</id>
+            <properties>
+              <sonar.profile>MyQualityProfile2</sonar.profile>
+            </properties>
+         </profile>
+        </profiles>
 
 </project>
