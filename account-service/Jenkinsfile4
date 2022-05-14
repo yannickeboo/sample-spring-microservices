@@ -14,11 +14,29 @@ pipeline {
                 sh 'mvn -B -DskipTests clean package' 
             }
         }
-        stage('SonarQube analysis 1') {
-            steps {
-                sh 'mvn clean package sonar:sonar -sonar'
+        stage('Quality Gate Statuc Check'){
+
+               agent {
+                docker {
+                image 'maven'
+                args '-v $HOME/.m2:/root/.m2'
+                }
             }
-        }
+                  steps{
+                      script{
+                      withSonarQubeEnv('sonarserver') { 
+                      sh "mvn sonar:sonar"
+                       }
+                      timeout(time: 1, unit: 'HOURS') {
+                      def qg = waitForQualityGate()
+                      if (qg.status != 'OK') {
+                           error "Pipeline aborted due to quality gate failure: ${qg.status}"
+                      }
+                    }
+		    sh "mvn clean install"
+                  }
+                }  
+              }
      stage('docker image') {
       
       steps {
