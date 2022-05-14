@@ -1,6 +1,6 @@
  pipeline {
  
-    agent any
+    agent none
    
     environment{
         VERSION = "${env.BUILD_ID}"
@@ -10,15 +10,15 @@
           
         stage('Build') { 
             agent { 
-     docker { image 'docker.io/library/maven:3.8.5-openjdk-11' }
+              docker { image 'docker.io/library/maven:3.8.5-openjdk-11' }
           }
             steps {
                 sh 'mvn -B -DskipTests clean package' 
             }
         }
      stage('docker image') {
-       agent { 
-     docker { image 'docker.io/library/docker:20.10.16-dind' }
+      agent { 
+          docker { image 'docker.io/library/docker:20.10.16-dind' }
           }
       steps {
        
