@@ -63,17 +63,17 @@
 
         <profiles>
           <profile>
-            <id>QualityProfileOne</id>
-            <properties>
-              <sonar.profile>MyQualityProfile1</sonar.profile>
-            </properties>
-          </profile>
-          <profile>
-            <id>QualityProfileTwo</id>
-            <properties>
-              <sonar.profile>MyQualityProfile2</sonar.profile>
-            </properties>
-         </profile>
+            <id>sonar</id>
+                 <activation>
+                   <activeByDefault>true</activeByDefault>
+                 </activation>
+       <properties>
+       <!-- Optional URL to server. Default value is http://68.183.26.220:9000 -->
+          <sonar.host.url>
+            http://68.183.26.220:9000/
+          </sonar.host.url>
+      </properties>
+        </profile>
         </profiles>
 
 </project>
