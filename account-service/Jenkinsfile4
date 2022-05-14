@@ -55,7 +55,7 @@ pipeline {
 
                     dir('kubernetes/') {
                         withEnv(['DATREE_TOKEN=75b8f4e7-efcb-4366-82b0-de926a27fd28']) {
-                              sh 'helm datree test anael/*'
+                              sh 'datree test anael/*'
                         }
                     }
                 }
