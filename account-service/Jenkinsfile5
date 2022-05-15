@@ -5,6 +5,7 @@ pipeline {
     environment{
         VERSION = "${env.BUILD_ID}"
         IMAGE_NAME = "yannickeboo/parker"
+	BUILD_URL= "http://104.248.119.145:8080/job/teest/"
     }
     stages {
           
