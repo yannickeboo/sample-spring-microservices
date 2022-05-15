@@ -1,0 +1,54 @@
+pipeline {
+ 
+    agent { label 'node1' }
+   
+    environment{
+        VERSION = "${env.BUILD_ID}"
+        IMAGE_NAME = "yannickeboo/parker"
+    }
+    stages {
+          
+        stage('Build') { 
+            
+            steps {
+                sh 'mvn -B -DskipTests clean package' 
+            }
+        }
+        stage('Quality Gate Statuc Check'){
+
+                  steps{
+                      script{
+                      withSonarQubeEnv('sonarqube') { 
+                      sh "mvn sonar:sonar"
+                       }
+                      timeout(time: 1, unit: 'HOURS') {
+                      def qg = waitForQualityGate()
+                      if (qg.status != 'OK') {
+                           error "Pipeline aborted due to quality gate failure: ${qg.status}"
+                      }
+                    }
+		    sh "mvn clean install"
+                  }
+                }  
+              }
+    
+     stage('docker image') {
+      
+      steps {
+       
+       withDockerRegistry([ credentialsId: "Docker_hub", url: "https://index.docker.io/v1/" ]) {
+       sh 'docker build . -t $IMAGE_NAME:app1-$VERSION -f account-service/Dockerfile'
+       sh 'docker tag $IMAGE_NAME:app1-$VERSION $IMAGE_NAME:$VERSION'
+       sh 'docker push $IMAGE_NAME:app1-$VERSION'
+       sh 'docker push $IMAGE_NAME:$VERSION'
+        
+        }
+       
+        
+     
+         
+      }
+     }
+      
+    }
+}
