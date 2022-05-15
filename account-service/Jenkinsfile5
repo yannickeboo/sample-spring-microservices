@@ -5,7 +5,7 @@ pipeline {
     environment{
         VERSION = "${env.BUILD_ID}"
         IMAGE_NAME = "yannickeboo/parker"
-	BUILD_URL= "http://104.248.119.145:8080/job/teest/"
+
     }
     stages {
           
@@ -55,7 +55,7 @@ pipeline {
     post {
         success {
             script {
-                statusComment = "[${env.JOB_NAME}] <${env.BUILD_URL}|#${env.BUILD_NUMBER}> completed succesfully for ${env.GIT_BRANCH} :tada:"
+                statusComment = "Hello Devops Engineer, the job [${env.JOB_NAME}] <${env.BUILD_URL}|#${env.BUILD_NUMBER}> completed succesfully for ${env.GIT_BRANCH} :tada:"
                 slackSend color: 'good', message: statusComment
             }
         }
