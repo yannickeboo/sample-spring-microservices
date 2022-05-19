@@ -83,11 +83,25 @@ pipeline {
             }
         }
         
-        post {
-              always{
-              }
-              success{}
-              failure{}
+         post {
+        success {
+            script {
+                statusComment = "Hello Devops Engineer, the job [${env.JOB_NAME}] <${env.BUILD_URL}|#${env.BUILD_NUMBER}> completed succesfully for ${env.GIT_BRANCH} :tada:"
+                slackSend color: 'good', message: statusComment
+            }
+        }
+        failure {
+            script {
+                statusComment = getTestResultsMessage()
+                slackSend color: 'danger', message: statusComment
+            }
+        }
+        aborted {
+            script {
+                statusComment = "[${env.JOB_NAME}] <${env.BUILD_URL}|#${env.BUILD_NUMBER}> for ${env.GIT_BRANCH} was aborted by ${getBuildUser()}"
+                slackSend message: statusComment
+            }
+        }
         
     }
     
