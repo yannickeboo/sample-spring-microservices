@@ -10,9 +10,7 @@
     stages {
           
         stage('Build') { 
-            agent { 
-              docker { image 'docker.io/library/maven:latest' }
-          }
+            
             steps {
                 
                 sh 'mvn clean package' 
