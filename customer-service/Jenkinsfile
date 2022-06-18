@@ -11,7 +11,7 @@
           
         stage('Build') { 
             agent { 
-              docker { image 'docker.io/library/maven:3-openjdk-18-slim' }
+              docker { image 'docker.io/library/maven:latest' }
           }
             steps {
                 dir('customer-service'){
@@ -25,7 +25,7 @@
        
        dir('customer-service'){
        withDockerRegistry([ credentialsId: "Docker_hub", url: "https://index.docker.io/v1/" ]) {
-       sh 'mvn clean package' 
+       
        sh 'pwd && ls'
        sh  'docker build -t $IMAGE_NAME:app1-$VERSION .'
        sh 'docker tag $IMAGE_NAME:app1-$VERSION $IMAGE_NAME:$VERSION'
