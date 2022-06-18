@@ -29,7 +29,7 @@
        sh 'docker push $IMAGE_NAME:$VERSION'
         
         }
-       }
+       
         
      
          
