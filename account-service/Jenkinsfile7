@@ -11,7 +11,7 @@
           
         stage('Build') { 
             agent { 
-              docker { image 'docker.io/library/maven:3-openjdk-18-slim' }
+              docker { image 'docker.io/library/maven:latest' }
           }
             steps {
                 sh 'mvn -B -DskipTests clean package' 
