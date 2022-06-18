@@ -1,34 +1,39 @@
-node {
+ pipeline {
 
-    withMaven(maven:'maven') {
-
-        stage('Checkout') {
-            git url: 'https://github.com/saurabh0010/sample-spring-microservices.git'
-        }
-
-        stage('Build') {
-            sh 'mvn clean install'
-
-            def pom = readMavenPom file:'pom.xml'
-            print pom.version
-            env.version = pom.version
-        }
-
-        stage('Image') {
-            dir ('customer-service') {
-                def app = docker.build "localhost:5000/customer-service:${env.version}"
-                app.push()
+ 
+  agent any
+   
+    environment{
+        VERSION = "${env.BUILD_ID}"
+        IMAGE_NAME = "yannickeboo/anael"
+    }
+    stages {
+          
+        stage('Build') { 
+            agent { 
+              docker { image 'docker.io/library/maven:3-openjdk-18-slim' }
+          }
+            steps {
+                sh 'mvn -B -DskipTests clean package' 
             }
         }
-
-        stage ('Run') {
-            docker.image("localhost:5000/customer-service:${env.version}").run('-p 3333:3333 -h customer --name customer --link discovery --link account')
+     stage('docker image') {
+      
+      steps {
+       
+       withDockerRegistry([ credentialsId: "Docker_hub", url: "https://index.docker.io/v1/" ]) {
+       
+       sh 'DOCKER_BUILDKIT=1 docker build . -t $IMAGE_NAME:app1-$VERSION -f account-service/Dockerfile'
+       sh 'docker tag $IMAGE_NAME:app1-$VERSION $IMAGE_NAME:$VERSION'
+       sh 'docker push $IMAGE_NAME:app1-$VERSION'
+       sh 'docker push $IMAGE_NAME:$VERSION'
+        
         }
-
-        stage ('Final') {
-            build job: 'gateway-service-pipeline', wait: false
-        }      
-
+       
+        
+     
+         
+      }
+     }
     }
-
 }
