@@ -20,7 +20,7 @@
      stage('docker image') {
       
       steps {
-       dir('account-service){
+       dir('account-service'){
        withDockerRegistry([ credentialsId: "Docker_hub", url: "https://index.docker.io/v1/" ]) {
        
        sh 'DOCKER_BUILDKIT=1 docker build -t $IMAGE_NAME:app1-$VERSION .'
