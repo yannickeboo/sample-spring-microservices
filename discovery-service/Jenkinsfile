@@ -23,7 +23,7 @@
       
       steps {
        
-       dir('discovery-account'){
+       dir('discovery-service'){
        withDockerRegistry([ credentialsId: "Docker_hub", url: "https://index.docker.io/v1/" ]) {
        
        sh 'pwd && ls'
