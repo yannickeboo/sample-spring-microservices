@@ -15,7 +15,7 @@
           }
             steps {
                 dir('customer-service'){
-                sh 'mvn -B -DskipTests clean package' 
+                sh 'mvn clean package' 
             }
             } 
         }
