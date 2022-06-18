@@ -25,6 +25,7 @@
        
        dir('customer-service'){
        withDockerRegistry([ credentialsId: "Docker_hub", url: "https://index.docker.io/v1/" ]) {
+       sh 'mvn clean package' 
        sh 'pwd && ls'
        sh  'docker build -t $IMAGE_NAME:app1-$VERSION .'
        sh 'docker tag $IMAGE_NAME:app1-$VERSION $IMAGE_NAME:$VERSION'
