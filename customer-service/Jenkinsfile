@@ -11,7 +11,7 @@
           
         stage('Build') { 
             agent { 
-              docker { image 'docker.io/library/maven:latest' }
+              docker { image 'maven:latest' }
           }
             steps {
                 
