@@ -1,34 +1,45 @@
-node {
+ pipeline {
 
-    withMaven(maven:'maven') {
-
-        stage('Checkout') {
-            git url: 'git@github.com:saurabh0010/sample-spring-microservices.git', CredentialsID: 'github', branch: 'master'
-        }
-
-        stage('Build') {
-            sh 'mvn clean install'
-
-            def pom = readMavenPom file:'pom.xml'
-            print pom.version
-            env.version = pom.version
-        }
-
-        stage('Image') {
-            dir ('discovery-service') {
-                def app = docker.build "localhost:5000/discovery-service:${env.version}"
-                app.push()
-            }
-        }
-
-        stage ('Run') {
-            docker.image("localhost:5000/discovery-service:${env.version}").run('-p 8761:8761 -h discovery --name discovery')
-        }
-
-        stage ('Final') {
-            build job: 'account-service-pipeline', wait: false
-        }      
-
+ 
+  agent any
+   
+    environment{
+        VERSION = "${env.BUILD_ID}"
+        IMAGE_NAME = "yannickeboo/apt"
     }
-
+    stages {
+          
+        stage('Build') { 
+            agent { 
+              docker { image 'docker.io/library/maven:latest' }
+          }
+            steps {
+                
+                sh 'mvn clean package' 
+            }
+            
+        }
+     stage('docker image') {
+      
+      
+      steps {
+       
+       dir('discovery-service'){
+       withDockerRegistry([ credentialsId: "Docker_hub", url: "https://index.docker.io/v1/" ]) {
+       
+       sh 'pwd && ls'
+       sh  'docker build  -t $IMAGE_NAME:app1-$VERSION .'
+       sh 'docker tag $IMAGE_NAME:app1-$VERSION $IMAGE_NAME:$VERSION'
+       sh 'docker push $IMAGE_NAME:app1-$VERSION'
+       sh 'docker push $IMAGE_NAME:$VERSION'
+        
+       }
+       }
+       
+        
+     
+         
+      }
+     }
+    }
 }
