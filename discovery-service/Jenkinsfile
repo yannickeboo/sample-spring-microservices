@@ -14,10 +14,11 @@
               docker { image 'docker.io/library/maven:latest' }
           }
             steps {
-                
+             
+                dir('discovery-service'){
                 sh 'mvn clean package' 
             }
-            
+            }
         }
      stage('docker image') {
       
