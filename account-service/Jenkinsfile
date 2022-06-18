@@ -1,6 +1,7 @@
  pipeline {
+  agent any
  
-  agent { label "slave" }
+  #agent { label "slave" }
    
     environment{
         VERSION = "${env.BUILD_ID}"
