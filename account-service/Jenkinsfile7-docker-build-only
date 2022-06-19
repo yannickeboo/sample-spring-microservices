@@ -1,7 +1,7 @@
  pipeline {
 
  
- agent none
+ agent any
    
     environment{
         VERSION = "${env.BUILD_ID}"
@@ -21,7 +21,7 @@
             
         }
      stage('docker image') {
-       agent any
+   
       
       steps {
        
