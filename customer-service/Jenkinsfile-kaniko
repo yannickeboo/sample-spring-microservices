@@ -42,7 +42,23 @@ spec:
       steps {
        
        dir('customer-service'){
-      sh '/kaniko/executor -f `pwd`/Dockerfile -c `pwd` --cache=true --destination=yannickeboo/kanino:v1'
+      DOCKER_USERNAME=[yannickeboo]
+DOCKER_PASSWORD=[Airfrance.123]
+AUTH=$(echo -n "${DOCKER_USERNAME}:${DOCKER_PASSWORD}" | base64)
+cat << EOF > config.json
+{
+    "auths": {
+        "https://index.docker.io/v1/": {
+            "auth": "${AUTH}"
+        }
+    }
+}
+EOF
+docker run \
+    -v `pwd`/config.json:/kaniko/.docker/config.json:ro \
+    -v `pwd`:/workspace \
+    gcr.io/kaniko-project/executor:v1.0.0 \
+    --destination yannickeboo/kaniko-demo:kaniko-docker
         
        }
        }
