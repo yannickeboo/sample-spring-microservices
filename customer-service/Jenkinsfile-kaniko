@@ -1,25 +1,7 @@
 pipeline {
 
  
-  agent any
-   
-    environment{
-        VERSION = "${env.BUILD_ID}"
-        IMAGE_NAME = "yannickeboo/anael"
-    }
-    stages {
-          
-        stage('Build') { 
-          
-            steps {
-                
-                sh 'mvn clean package' 
-            }
-            
-        }
-     stage('docker image') {
-      
-     agent {
+  agent {
     kubernetes {
       //cloud 'kubernetes'
       defaultContainer 'kaniko'
@@ -38,6 +20,24 @@ spec:
 """
     }
   }
+   
+    environment{
+        VERSION = "${env.BUILD_ID}"
+        IMAGE_NAME = "yannickeboo/anael"
+    }
+    stages {
+          
+        stage('Build') { 
+          
+            steps {
+                
+                sh 'mvn clean package' 
+            }
+            
+        }
+     stage('docker image') {
+      
+     
 
       steps {
        
