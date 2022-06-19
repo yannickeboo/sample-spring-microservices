@@ -21,9 +21,7 @@
             
         }
      stage('docker image') {
-      agent { 
-              docker { image 'docker.io/library/docker:rc-dind-rootless' }
-          }
+      
       
       steps {
        
