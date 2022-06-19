@@ -1,7 +1,7 @@
  pipeline {
 
  
-  agent any
+  agent none
    
     environment{
         VERSION = "${env.BUILD_ID}"
@@ -10,6 +10,9 @@
     stages {
           
         stage('Build') { 
+            agent { 
+              docker { image 'docker.io/library/maven:3-openjdk-18-slim' }
+          }
             
             steps {
                 
