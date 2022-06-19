@@ -21,12 +21,12 @@
             
         }
      stage('docker image') {
-      
-      
-      steps {
-       agent { 
+      agent { 
               docker { image 'docker.io/library/docker:rc-dind-rootless' }
           }
+      
+      steps {
+       
        dir('account-service'){
        withDockerRegistry([ credentialsId: "Docker_hub", url: "https://index.docker.io/v1/" ]) {
        
