@@ -19,20 +19,30 @@ pipeline {
         }
      stage('docker image') {
       
-      agent {
-        docker { image 'gcr.io/kaniko-project/executor:debug' }
+     agent {
+    kubernetes {
+      //cloud 'kubernetes'
+      defaultContainer 'kaniko'
+      yaml """
+kind: Pod
+spec:
+  serviceAccountName: jenkins-sa
+  containers:
+  - name: kaniko
+    image: gcr.io/kaniko-project/executor:debug-539ddefcae3fd6b411a95982a830d987f4214251
+    imagePullPolicy: Always
+    command:
+    - sleep
+    args:
+    - 9999999
+"""
     }
+  }
 
       steps {
        
        dir('customer-service'){
-       withDockerRegistry([ credentialsId: "Docker_hub", url: "https://index.docker.io/v1/" ]) {
-       
-       sh 'pwd && ls'
-       sh  'docker build  -t $IMAGE_NAME:app1-$VERSION .'
-       sh 'docker tag $IMAGE_NAME:app1-$VERSION $IMAGE_NAME:$VERSION'
-       sh 'docker push $IMAGE_NAME:app1-$VERSION'
-       sh 'docker push $IMAGE_NAME:$VERSION'
+      sh '/kaniko/executor -f `pwd`/Dockerfile -c `pwd` --cache=true --destination=yannickeboo/kanino:v1'
         
        }
        }
