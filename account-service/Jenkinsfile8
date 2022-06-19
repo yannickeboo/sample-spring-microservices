@@ -23,7 +23,7 @@ pipeline {
         }
      stage('docker image') {
    
-    
+    agent any
       steps {
        
        dir('account-service'){
