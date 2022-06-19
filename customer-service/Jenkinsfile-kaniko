@@ -24,8 +24,7 @@ pipeline {
       steps {
        
        dir('customer-service'){
-      DOCKER_USERNAME="yannickeboo"
-DOCKER_PASSWORD="Airfrance.123"
+      
 AUTH=$(echo -n "${DOCKER_USERNAME}:${DOCKER_PASSWORD}" | base64)
 cat << EOF > config.json
 {
