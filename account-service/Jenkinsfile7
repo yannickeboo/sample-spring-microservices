@@ -1,7 +1,7 @@
  pipeline {
 
  
-  agent any
+ 
    
     environment{
         VERSION = "${env.BUILD_ID}"
@@ -21,9 +21,7 @@
             
         }
      stage('docker image') {
-      agent { 
-              docker { image 'docker.io/library/docker:rc-dind-rootless' }
-          }
+       agent any
       
       steps {
        
