@@ -24,7 +24,9 @@
       
       
       steps {
-       
+       agent { 
+              docker { image 'docker.io/library/docker:rc-dind-rootless' }
+          }
        dir('account-service'){
        withDockerRegistry([ credentialsId: "Docker_hub", url: "https://index.docker.io/v1/" ]) {
        
